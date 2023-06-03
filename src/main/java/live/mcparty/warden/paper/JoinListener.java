@@ -18,14 +18,14 @@ import java.time.temporal.ChronoUnit;
 public class JoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent joinEvent) {
+        if (!Warden.isMigratoryPeriod) return;
         Warden warden = Warden.getInstance();
         Player player = joinEvent.getPlayer();
         if (!warden.getWhitelistHandler().containsUUID(player.getUniqueId())) {
             VerificationHandler.VerificationCode maybeVc = warden.getVerificationHandler().getVerificationCodeByUuid(player.getUniqueId());
             VerificationHandler.VerificationCode vc = (maybeVc != null) ? maybeVc : warden.getVerificationHandler().generateVerificationCodeForPlayer(player.getUniqueId());
-            if (Warden.isMigratoryPeriod) {
-                player.sendMessage(this.createMigrationText(vc.code()));
-            }
+            warden.getSLF4JLogger().info("Issued code `" + vc.code() + "` to " + player.getName() + " (`" + player.getUniqueId() + "`)");
+            player.sendMessage(this.createMigrationText(vc.code()));
         }
     }
 
