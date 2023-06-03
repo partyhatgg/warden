@@ -43,7 +43,7 @@ public class VerifyCommand implements IDiscordCommand {
         MessageEmbed embed = new EmbedBuilder()
                 .setAuthor("Verified!", null, "https://cdn.discordapp.com/icons/421459800757501952/255e24acfe657af4f0a01067d58ff99d.png")
                 .setColor(Color.CYAN)
-                .setDescription("Thank you for verifying! You've now been whitelisted." + (Warden.isMigratoryPeriod ? "" : "Please reconnect."))
+                .setDescription("Thank you for verifying! You've now been whitelisted." + (Warden.isMigratoryPeriod ? "" : " Please reconnect."))
                 .build();
         return MessageCreateData.fromEmbeds(embed);
     }
