@@ -1,0 +1,4 @@
+name: Warden
+version: '${version}'
+main: live.mcparty.warden.Warden
+api-version: 1.19
