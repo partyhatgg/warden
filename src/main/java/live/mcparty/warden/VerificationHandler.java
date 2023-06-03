@@ -64,8 +64,13 @@ public class VerificationHandler {
      */
     @Nullable
     public VerificationCode getVerificationCodeByUuid(UUID uuid) {
-        for (VerificationCode vc : verificationCodeMap.values()) {
+        for (Map.Entry<String, VerificationCode> entry : verificationCodeMap.entrySet()) {
+            VerificationCode vc = entry.getValue();
             if (vc.issuedTo().equals(uuid)) {
+                if (vc.getExpirationInstant().isBefore(Instant.now())) {
+                    verificationCodeMap.remove(entry.getKey());
+                    return null;
+                }
                 return vc;
             }
         }
