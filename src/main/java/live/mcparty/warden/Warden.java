@@ -27,15 +27,15 @@ public final class Warden extends JavaPlugin {
     public void onEnable() {
         instance = this;
         this.saveDefaultConfig();
-        this.jda = JDABuilder.createDefault(getConfig().getString("warden.jda.token")).build();
-        this.commandManager = new CommandManager();
-        this.commandManager.registerCommands(this.jda);
-        this.jda.addEventListener(this.commandManager, new LeaveListener());
         this.whitelistHandler = new WhitelistHandler(getDataFolder());
         this.whitelistHandler.readFromFile();
         this.verificationHandler = new VerificationHandler();
         isMigratoryPeriod = getConfig().getBoolean("warden.migration");
         getServer().getPluginManager().registerEvents(new JoinListener(), this);
+        this.jda = JDABuilder.createDefault(getConfig().getString("warden.jda.token")).build();
+        this.commandManager = new CommandManager();
+        this.commandManager.registerCommands(this.jda);
+        this.jda.addEventListener(this.commandManager, new LeaveListener());
     }
 
     @Override
