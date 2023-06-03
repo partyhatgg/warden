@@ -10,6 +10,7 @@ import java.util.UUID;
 public class LeaveListener extends ListenerAdapter {
     @Override
     public void onGuildMemberRemove(@NotNull GuildMemberRemoveEvent event) {
+        if (event.getGuild().getIdLong() != 421459800757501952L) return;
         Warden.getInstance().getWhitelistHandler().unwhitelistByDiscordID(event.getUser().getIdLong());
     }
 }
