@@ -1,5 +1,6 @@
 package live.mcparty.warden.paper;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import live.mcparty.warden.VerificationHandler;
 import live.mcparty.warden.Warden;
 import net.kyori.adventure.text.Component;
@@ -32,14 +33,15 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void onLogin(PlayerLoginEvent loginEvent) {
+        if (Warden.isMigratoryPeriod) return;
         Warden warden = Warden.getInstance();
-        Player player = loginEvent.getPlayer();
-        if (!warden.getWhitelistHandler().containsUUID(player.getUniqueId())) {
-            VerificationHandler.VerificationCode maybeVc = warden.getVerificationHandler().getVerificationCodeByUuid(player.getUniqueId());
-            VerificationHandler.VerificationCode vc = (maybeVc != null) ? maybeVc : warden.getVerificationHandler().generateVerificationCodeForPlayer(player.getUniqueId());
-            if (!Warden.isMigratoryPeriod) {
-                loginEvent.disallow(PlayerLoginEvent.Result.KICK_OTHER, this.createKickText(vc.code(), Duration.between(Instant.now(), vc.getExpirationInstant())));
-            }
+        PlayerProfile player = loginEvent.getPlayer().getPlayerProfile();
+        if (!warden.getWhitelistHandler().containsUUID(player.getId())) {
+            VerificationHandler.VerificationCode maybeVc = warden.getVerificationHandler().getVerificationCodeByUuid(player.getId());
+            VerificationHandler.VerificationCode vc = (maybeVc != null) ? maybeVc : warden.getVerificationHandler().generateVerificationCodeForPlayer(player.getId());
+            loginEvent.disallow(PlayerLoginEvent.Result.KICK_OTHER, this.createKickText(vc.code(), Duration.between(Instant.now(), vc.getExpirationInstant())));
+        } else {
+            loginEvent.allow();
         }
     }
 
