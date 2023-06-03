@@ -2,3 +2,7 @@ warden:
   jda:
     token:
   migration: true
+  modroles:
+    - 1071939754188361878L # Minecraft BTS
+    - 1071571325518364766L # Minecraft Moderator
+    - 421492727621091349L # Moderator

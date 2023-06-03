@@ -2,6 +2,7 @@ package live.mcparty.warden.discord.commands.impl;
 
 import live.mcparty.warden.Warden;
 import live.mcparty.warden.discord.commands.IDiscordCommand;
+import live.mcparty.warden.util.CollectionUtil;
 import live.mcparty.warden.util.MojangApiUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -20,7 +21,6 @@ public class UnverifyCommand implements IDiscordCommand {
         return Commands.slash("unverify", "Unverifies a minecraft account from a discord account")
                 .addOption(OptionType.USER, "discord", "The user's discord account", false, false)
                 .addOption(OptionType.STRING, "minecraft", "The user's minecraft username", false, true)
-                .addSubcommands()
                 ;
     }
 
@@ -28,30 +28,37 @@ public class UnverifyCommand implements IDiscordCommand {
     public void executeCommand(SlashCommandInteractionEvent event) {
         event.deferReply(true).queue(hook -> {
             hook.setEphemeral(true);
-            var discordOption = event.getOption("discord");
-            var minecraftOption = event.getOption("minecraft");
-            if (discordOption != null) {
-                var discordUser = discordOption.getAsUser();
-                UUID uuid = Warden.getInstance().getWhitelistHandler().unwhitelistByDiscordID(discordUser.getIdLong());
-                if (uuid == null) {
-                    hook.sendMessage(createUnverifyFailEmbed("User not found in whitelist.")).queue();
+            if (
+                    Warden.SUPERUSERS.contains(event.getUser().getIdLong()) ||
+                            (event.getGuild() != null && CollectionUtil.containsAny(event.getMember().getRoles(), Warden.modRoles))
+            ) {
+                var discordOption = event.getOption("discord");
+                var minecraftOption = event.getOption("minecraft");
+                if (discordOption != null) {
+                    var discordUser = discordOption.getAsUser();
+                    UUID uuid = Warden.getInstance().getWhitelistHandler().unwhitelistByDiscordID(discordUser.getIdLong());
+                    if (uuid == null) {
+                        hook.sendMessage(createUnverifyFailEmbed("User not found in whitelist.")).queue();
+                    } else {
+                        hook.sendMessage(createUnverifyEmbed(uuid, null, discordUser.getIdLong())).queue();
+                    }
+                } else if (minecraftOption != null) {
+                    String username = minecraftOption.getAsString();
+                    UUID uuid = MojangApiUtil.getUUIDForUsername(username);
+                    if (uuid == null) {
+                        hook.sendMessage(createUnverifyFailEmbed("UUID lookup failed. Is this a valid username? \n(`" + username + "`)")).queue();
+                    }
+                    Long discordId = Warden.getInstance().getWhitelistHandler().unwhitelistByUUID(uuid);
+                    if (discordId == null) {
+                        hook.sendMessage("User not found in whitelist. \n(`" + username + "`)").queue();
+                    } else {
+                        hook.sendMessage(createUnverifyEmbed(uuid, username, discordId)).queue();
+                    }
                 } else {
-                    hook.sendMessage(createUnverifyEmbed(uuid, null, discordUser.getIdLong())).queue();
-                }
-            } else if (minecraftOption != null) {
-                String username = minecraftOption.getAsString();
-                UUID uuid = MojangApiUtil.getUUIDForUsername(username);
-                if (uuid == null) {
-                    hook.sendMessage(createUnverifyFailEmbed("UUID lookup failed. Is this a valid username? \n(`" + username + "`)")).queue();
-                }
-                Long discordId = Warden.getInstance().getWhitelistHandler().unwhitelistByUUID(uuid);
-                if (discordId == null) {
-                    hook.sendMessage("User not found in whitelist. \n(`" + username + "`)").queue();
-                } else {
-                    hook.sendMessage(createUnverifyEmbed(uuid, username, discordId)).queue();
+                    hook.sendMessage(MessageCreateData.fromContent("You must provide one of the options!")).queue();
                 }
             } else {
-                hook.sendMessage(MessageCreateData.fromContent("You must provide one of the options!")).queue();
+                hook.sendMessage(createPermissionFailEmbed()).queue();
             }
         });
     }
@@ -76,5 +83,13 @@ public class UnverifyCommand implements IDiscordCommand {
                 .addField(new MessageEmbed.Field("Reason", reason, false))
                 .build();
         return MessageCreateData.fromEmbeds(lookupFailEmbed);
+    }
+
+    private MessageCreateData createPermissionFailEmbed() {
+        MessageEmbed embed = new EmbedBuilder()
+                .setAuthor("How did you get here?", null, "https://cdn.discordapp.com/icons/421459800757501952/255e24acfe657af4f0a01067d58ff99d.png")
+                .setColor(Color.RED)
+                .build();
+        return MessageCreateData.fromEmbeds(embed);
     }
 }
