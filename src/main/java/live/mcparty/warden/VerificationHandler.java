@@ -1,14 +1,10 @@
 package live.mcparty.warden;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class VerificationHandler {
     public static final long EXPIRATION_LENGTH = 60L;
@@ -21,13 +17,24 @@ public class VerificationHandler {
      */
     @NotNull
     public VerificationCode generateVerificationCodeForPlayer(@NotNull UUID playerUuid) {
-        String verificationCode = RandomStringUtils.randomAlphanumeric(5).toUpperCase(Locale.ROOT);
-        while (verificationCodeMap.get(verificationCode) == null) {
-            verificationCode = RandomStringUtils.randomAlphanumeric(5).toUpperCase(Locale.ROOT);
+        String verificationCode = generateRandomString(5).toUpperCase(Locale.ROOT);
+        while (verificationCodeMap.get(verificationCode) != null) {
+            verificationCode = generateRandomString(5).toUpperCase(Locale.ROOT);
         }
         VerificationCode vc = new VerificationCode(verificationCode, playerUuid, Instant.now());
         verificationCodeMap.put(verificationCode, vc);
         return vc;
+    }
+
+    private static final Random rand = new Random();
+
+    private String generateRandomString(int length) {
+        String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            sb.append(chars.charAt(rand.nextInt(chars.length())));
+        }
+        return sb.toString();
     }
 
     /**
