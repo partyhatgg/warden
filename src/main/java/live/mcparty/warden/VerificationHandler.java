@@ -44,10 +44,11 @@ public class VerificationHandler {
      * @return success boolean
      */
     public boolean verifyUser(@NotNull String verificationCode, long discordId) {
-        VerificationCode maybeVerification = verificationCodeMap.get(verificationCode);
+        String vc = verificationCode.toUpperCase(Locale.ROOT);
+        VerificationCode maybeVerification = verificationCodeMap.get(vc);
         if (maybeVerification != null) {
             if (maybeVerification.getExpirationInstant().isBefore(Instant.now())) {
-                verificationCodeMap.remove(verificationCode);
+                verificationCodeMap.remove(vc);
                 return false;
             }
             Warden.getInstance().getWhitelistHandler().whitelist(maybeVerification.issuedTo(), discordId);
