@@ -9,11 +9,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 
 public class JoinListener implements Listener {
     @EventHandler
@@ -25,12 +25,20 @@ public class JoinListener implements Listener {
             VerificationHandler.VerificationCode vc = (maybeVc != null) ? maybeVc : warden.getVerificationHandler().generateVerificationCodeForPlayer(player.getUniqueId());
             if (Warden.isMigratoryPeriod) {
                 player.sendMessage(this.createMigrationText(vc.code()));
-            } else {
-                player.kick(this.createKickText(vc.code(), Duration.between(Instant.now(), vc.getExpirationInstant())));
             }
-            player.sendMessage(
-                    Component.text()
-            );
+        }
+    }
+
+    @EventHandler
+    public void onLogin(PlayerLoginEvent loginEvent) {
+        Warden warden = Warden.getInstance();
+        Player player = loginEvent.getPlayer();
+        if (!warden.getWhitelistHandler().containsUUID(player.getUniqueId())) {
+            VerificationHandler.VerificationCode maybeVc = warden.getVerificationHandler().getVerificationCodeByUuid(player.getUniqueId());
+            VerificationHandler.VerificationCode vc = (maybeVc != null) ? maybeVc : warden.getVerificationHandler().generateVerificationCodeForPlayer(player.getUniqueId());
+            if (!Warden.isMigratoryPeriod) {
+                loginEvent.disallow(PlayerLoginEvent.Result.KICK_OTHER, this.createKickText(vc.code(), Duration.between(Instant.now(), vc.getExpirationInstant())));
+            }
         }
     }
 
