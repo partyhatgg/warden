@@ -73,6 +73,7 @@ public class JoinListener implements Listener {
                     builder.decorate(TextDecoration.BOLD);
                     builder.color(NamedTextColor.AQUA);
                 })
+                .resetStyle()
                 .append(
                         Component.text()
                                 .content("We're migrating to a new whitelist system and don't seem to have your name on it yet.")
