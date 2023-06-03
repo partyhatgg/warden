@@ -3,6 +3,7 @@ package live.mcparty.warden.paper;
 import live.mcparty.warden.VerificationHandler;
 import live.mcparty.warden.Warden;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
@@ -84,7 +85,7 @@ public class JoinListener implements Listener {
                 .appendNewline()
                 .append(
                         Component.text("Please run ", NamedTextColor.GRAY)
-                                .append(Component.text("/verify " + verificationCode, NamedTextColor.WHITE))
+                                .append(Component.text("/verify " + verificationCode, NamedTextColor.WHITE).clickEvent(ClickEvent.suggestCommand("/verify " + verificationCode)))
                                 .append(Component.text(" in Discord!", NamedTextColor.GRAY))
                 );
     }
