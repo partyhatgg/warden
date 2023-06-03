@@ -23,7 +23,7 @@ public class LookupCommand implements IDiscordCommand {
         return Commands.slash("lookup", "Looks up a user's information.")
                 .addOption(OptionType.USER, "discord", "The user's discord account", false, false)
                 .addOption(OptionType.STRING, "minecraft", "The user's minecraft username", false, true)
-                .addOption(OptionType.BOOLEAN, "ephemeral", "Whether or not to be ephemereal", false, true);
+                .addOption(OptionType.BOOLEAN, "ephemeral", "Whether or not to be ephemereal", false, false);
     }
 
     @Override
