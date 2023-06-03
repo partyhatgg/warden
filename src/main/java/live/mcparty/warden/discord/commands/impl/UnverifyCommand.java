@@ -5,8 +5,10 @@ import live.mcparty.warden.discord.commands.IDiscordCommand;
 import live.mcparty.warden.util.CollectionUtil;
 import live.mcparty.warden.util.MojangApiUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -21,7 +23,7 @@ public class UnverifyCommand implements IDiscordCommand {
         return Commands.slash("unverify", "Unverifies a minecraft account from a discord account")
                 .addOption(OptionType.USER, "discord", "The user's discord account", false, false)
                 .addOption(OptionType.STRING, "minecraft", "The user's minecraft username", false, true)
-                ;
+                .setDefaultPermissions(DefaultMemberPermissions.enabledFor(Permission.ADMINISTRATOR));
     }
 
     @Override
