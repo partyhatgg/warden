@@ -3,7 +3,6 @@ package live.mcparty.warden.paper;
 import live.mcparty.warden.VerificationHandler;
 import live.mcparty.warden.Warden;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentBuilder;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
@@ -36,61 +35,49 @@ public class JoinListener implements Listener {
     }
 
     private Component createKickText(String verificationCode, Duration timeLeft) {
-        return Component.text()
-                .content("You are not whitelisted!")
-                .style(builder -> {
-                    builder.decorate(TextDecoration.BOLD);
-                    builder.color(NamedTextColor.RED);
-                })
-                .appendNewline()
+        return Component.empty()
                 .append(
-                        Component.text()
-                                .content("Join ")
-                                .color(NamedTextColor.GRAY)
-                                .append(Component.text("discord.gg/offlinetv"))
-                                .append(Component.text(" and run:").color(NamedTextColor.GRAY))
+                        Component.text("You are not whitelisted!", NamedTextColor.RED, TextDecoration.BOLD)
                 )
                 .appendNewline()
                 .append(
-                        Component.text()
-                                .content("/verify " + verificationCode)
+                        Component.text("Join ", NamedTextColor.GRAY)
+                                .append(Component.text("discord.gg/offlinetv", NamedTextColor.WHITE))
+                                .append(Component.text(" and run:", NamedTextColor.GRAY))
                 )
                 .appendNewline()
                 .append(
-                        Component.text()
-                                .content("This code expires in ")
-                                .color(NamedTextColor.GRAY)
-                                .append(Component.text(timeLeft.truncatedTo(ChronoUnit.SECONDS).toString()))
-                                .append(Component.text(".").color(NamedTextColor.GRAY))
+                        Component.text("/verify " + verificationCode, NamedTextColor.WHITE)
                 )
-                .build();
+                .appendNewline()
+                .append(
+                        Component.text("This code expires in ", NamedTextColor.GRAY)
+                                .append(
+                                        Component.text(
+                                                timeLeft.truncatedTo(ChronoUnit.SECONDS).toString()
+                                                        .substring(2)
+                                                        .replaceAll("(\\d[HMS])(?!$)", "$1 ")
+                                                        .toLowerCase(),
+                                                NamedTextColor.WHITE
+                                        )
+                                )
+                                .append(Component.text(".", NamedTextColor.GRAY))
+                );
     }
 
     private Component createMigrationText(String verificationCode) {
-        return Component.text()
-                .content("Hey! ")
-                .style(builder -> {
-                    builder.decorate(TextDecoration.BOLD);
-                    builder.color(NamedTextColor.AQUA);
-                })
-                .resetStyle()
+        return Component.empty()
                 .append(
-                        Component.text()
-                                .content("We're migrating to a new whitelist system and don't seem to have your name on it yet.")
-                                .color(NamedTextColor.GRAY)
+                        Component.text("Hey! ", NamedTextColor.AQUA, TextDecoration.BOLD)
+                )
+                .append(
+                        Component.text("We're migrating to a new whitelist system and don't seem to have your name on it yet.", NamedTextColor.GRAY)
                 )
                 .appendNewline()
                 .append(
-                        Component.text()
-                                .content("Please run ")
-                                .color(NamedTextColor.GRAY)
-                                .append(Component.text("/verify " + verificationCode))
-                                .append(
-                                        Component.text()
-                                                .content(" in Discord!")
-                                                .color(NamedTextColor.GRAY)
-                                )
-                )
-                .build();
+                        Component.text("Please run ", NamedTextColor.GRAY)
+                                .append(Component.text("/verify " + verificationCode, NamedTextColor.WHITE))
+                                .append(Component.text(" in Discord!", NamedTextColor.GRAY))
+                );
     }
 }
