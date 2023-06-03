@@ -39,7 +39,7 @@ public final class Warden extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        this.whitelistHandler.saveToFile();
     }
 
     public ObjectMapper getObjectMapper() {
