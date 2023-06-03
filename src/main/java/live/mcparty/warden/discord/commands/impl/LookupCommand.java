@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -22,12 +23,13 @@ public class LookupCommand implements IDiscordCommand {
         return Commands.slash("lookup", "Looks up a user's information.")
                 .addOption(OptionType.USER, "discord", "The user's discord account", false, false)
                 .addOption(OptionType.STRING, "minecraft", "The user's minecraft username", false, true)
-                ;
+                .addOption(OptionType.BOOLEAN, "ephemeral", "Whether or not to be ephemereal", false, true);
     }
 
     @Override
     public void executeCommand(SlashCommandInteractionEvent event) {
         event.deferReply(true).queue(hook -> {
+            hook.setEphemeral(event.getOption("ephemeral", true, OptionMapping::getAsBoolean));
             var discordOption = event.getOption("discord");
             var minecraftOption = event.getOption("minecraft");
             if (discordOption != null) {

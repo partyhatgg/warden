@@ -22,6 +22,7 @@ public class UnverifyMeCommand implements IDiscordCommand {
     @Override
     public void executeCommand(SlashCommandInteractionEvent event) {
         event.deferReply(true).queue(hook -> {
+            hook.setEphemeral(true);
             UUID uuid = Warden.getInstance().getWhitelistHandler().unwhitelistByDiscordID(event.getUser().getIdLong());
             if (uuid == null) {
                 hook.sendMessage(createUnverifyFailEmbed()).queue();

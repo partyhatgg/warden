@@ -27,6 +27,7 @@ public class UnverifyCommand implements IDiscordCommand {
     @Override
     public void executeCommand(SlashCommandInteractionEvent event) {
         event.deferReply(true).queue(hook -> {
+            hook.setEphemeral(true);
             var discordOption = event.getOption("discord");
             var minecraftOption = event.getOption("minecraft");
             if (discordOption != null) {
