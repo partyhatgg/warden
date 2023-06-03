@@ -26,6 +26,7 @@ public final class Warden extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        this.saveDefaultConfig();
         this.jda = JDABuilder.createDefault(getConfig().getString("warden.jda.token")).build();
         this.commandManager = new CommandManager();
         this.commandManager.registerCommands(this.jda);

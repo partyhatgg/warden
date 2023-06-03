@@ -1,0 +1,4 @@
+warden:
+  jda:
+    token:
+  migration: true
