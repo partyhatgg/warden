@@ -32,6 +32,11 @@ public class WhitelistHandler {
         Warden instance = Warden.getInstance();
         Logger logger = instance.getSLF4JLogger();
         try {
+            if (!file.exists()) {
+                if (file.mkdirs()) {
+                    file.createNewFile();
+                }
+            }
             whitelist.putAll(instance.getObjectMapper().readValue(file, new TypeReference<>() {}));
         } catch (StreamReadException e) {
             logger.error("Invalid content found while reading.", e);
