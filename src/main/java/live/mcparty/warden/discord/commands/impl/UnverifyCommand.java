@@ -3,7 +3,6 @@ package live.mcparty.warden.discord.commands.impl;
 import live.mcparty.warden.Warden;
 import live.mcparty.warden.discord.commands.IDiscordCommand;
 import live.mcparty.warden.util.CollectionUtil;
-import live.mcparty.warden.util.MojangApiUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -13,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
+import org.bukkit.Bukkit;
 
 import java.awt.*;
 import java.util.UUID;
@@ -46,8 +46,8 @@ public class UnverifyCommand implements IDiscordCommand {
                     }
                 } else if (minecraftOption != null) {
                     String username = minecraftOption.getAsString();
-                    UUID uuid = MojangApiUtil.getUUIDForUsername(username);
-                    if (uuid == null) {
+                    UUID uuid = Bukkit.getOfflinePlayer(username).getUniqueId();
+                    if (uuid.version() != 4) {
                         hook.sendMessage(createUnverifyFailEmbed("UUID lookup failed. Is this a valid username? \n(`" + username + "`)")).queue();
                     }
                     Long discordId = Warden.getInstance().getWhitelistHandler().unwhitelistByUUID(uuid);
@@ -67,7 +67,7 @@ public class UnverifyCommand implements IDiscordCommand {
 
     private MessageCreateData createUnverifyEmbed(UUID uuid, String username, long discordId) {
         if (username == null) {
-            username = MojangApiUtil.getUsernameForUUID(uuid);
+            username = Bukkit.getOfflinePlayer(uuid).getName();
         }
         MessageEmbed lookupEmbed = new EmbedBuilder()
                 .setAuthor("User Unverified", null, "https://cdn.discordapp.com/icons/421459800757501952/255e24acfe657af4f0a01067d58ff99d.png")

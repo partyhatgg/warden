@@ -2,13 +2,13 @@ package live.mcparty.warden.discord.commands.impl;
 
 import live.mcparty.warden.Warden;
 import live.mcparty.warden.discord.commands.IDiscordCommand;
-import live.mcparty.warden.util.MojangApiUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
+import org.bukkit.Bukkit;
 
 import java.awt.*;
 import java.util.UUID;
@@ -33,7 +33,7 @@ public class UnverifyMeCommand implements IDiscordCommand {
     }
 
     private MessageCreateData createUnverifyEmbed(UUID uuid, long discordId) {
-        String username = MojangApiUtil.getUsernameForUUID(uuid);
+        String username = Bukkit.getOfflinePlayer(uuid).getName();
         MessageEmbed lookupEmbed = new EmbedBuilder()
                 .setAuthor("User Unverified", null, "https://cdn.discordapp.com/icons/421459800757501952/255e24acfe657af4f0a01067d58ff99d.png")
                 .setColor(Color.CYAN)
