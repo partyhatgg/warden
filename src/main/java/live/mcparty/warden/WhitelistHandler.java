@@ -33,7 +33,7 @@ public class WhitelistHandler {
         Logger logger = instance.getSLF4JLogger();
         try {
             if (!file.exists()) {
-                if (file.mkdirs()) {
+                if (file.getParentFile().mkdirs()) {
                     file.createNewFile();
                 }
             }
