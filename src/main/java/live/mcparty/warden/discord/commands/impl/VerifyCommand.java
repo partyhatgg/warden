@@ -21,13 +21,11 @@ public class VerifyCommand implements IDiscordCommand {
 
     @Override
     public void executeCommand(SlashCommandInteractionEvent event) {
-        if (Warden.getInstance().getWhitelistHandler().containsDiscordID(event.getUser().getIdLong())) {
-            event.deferReply(true).queue(hook -> {
-                hook.sendMessage("You've already verified!").setEphemeral(true).queue();
-            });
-            return;
-        }
         event.deferReply(true).queue(interactionHook -> {
+            if (Warden.getInstance().getWhitelistHandler().containsDiscordID(event.getUser().getIdLong())) {
+                interactionHook.sendMessage("You've already verified!").setEphemeral(true).queue();
+                return;
+            }
             interactionHook.setEphemeral(true);
             String code = event.getOption("code").getAsString();
             boolean success = Warden.getInstance().getVerificationHandler().verifyUser(code, event.getUser().getIdLong());
