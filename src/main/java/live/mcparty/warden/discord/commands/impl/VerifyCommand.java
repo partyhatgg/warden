@@ -5,6 +5,7 @@ import live.mcparty.warden.discord.commands.IDiscordCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -27,7 +28,7 @@ public class VerifyCommand implements IDiscordCommand {
             hook.sendMessage("You've already verified!").setEphemeral(true).queue();
             return;
         }
-        String code = interaction.getOption("code").getAsString();
+        String code = interaction.getOption("code", "", OptionMapping::getAsString);
         boolean success = Warden.getInstance().getVerificationHandler().verifyUser(code, interaction.getUser().getIdLong());
         if (success) {
             hook.sendMessage(createSuccessEmbed()).queue();
