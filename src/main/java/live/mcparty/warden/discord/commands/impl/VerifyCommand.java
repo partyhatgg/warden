@@ -27,7 +27,6 @@ public class VerifyCommand implements IDiscordCommand {
             hook.sendMessage("You've already verified!").setEphemeral(true).queue();
             return;
         }
-        hook.setEphemeral(true);
         String code = interaction.getOption("code").getAsString();
         boolean success = Warden.getInstance().getVerificationHandler().verifyUser(code, interaction.getUser().getIdLong());
         if (success) {

@@ -11,6 +11,9 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
+import net.dv8tion.jda.internal.interactions.command.SlashCommandInteractionImpl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +40,12 @@ public class CommandManager extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-        event.deferReply(true).queue(hook -> {
+        IDiscordCommand command = commandMap.get(event.getName());
+        boolean ephemeral = true;
+        if (command.hasEphemeralArgument()) {
+            ephemeral = event.getInteraction().getOption("ephemeral", true, OptionMapping::getAsBoolean);
+        }
+        event.deferReply(ephemeral).queue(hook -> {
             commandMap.get(event.getName()).executeCommand(hook);
         });
     }

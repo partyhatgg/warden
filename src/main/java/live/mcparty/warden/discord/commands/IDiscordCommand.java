@@ -8,4 +8,8 @@ public interface IDiscordCommand {
 
     void executeCommand(InteractionHook event);
 
+    default boolean hasEphemeralArgument() {
+        return false;
+    };
+
 }

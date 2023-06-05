@@ -28,7 +28,6 @@ public class LookupCommand implements IDiscordCommand {
     @Override
     public void executeCommand(InteractionHook hook) {
         SlashCommandInteraction interaction = (SlashCommandInteraction) hook.getInteraction();
-        hook.setEphemeral(interaction.getOption("ephemeral", true, OptionMapping::getAsBoolean));
         var discordOption = interaction.getOption("discord");
         var minecraftOption = interaction.getOption("minecraft");
         if (discordOption != null) {
@@ -54,6 +53,11 @@ public class LookupCommand implements IDiscordCommand {
         } else {
             hook.sendMessage(MessageCreateData.fromContent("You must provide one of the options!")).queue();
         }
+    }
+
+    @Override
+    public boolean hasEphemeralArgument() {
+        return true;
     }
 
     private MessageCreateData createLookupEmbed(UUID uuid, String username, long discordId) {

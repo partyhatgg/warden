@@ -30,7 +30,6 @@ public class UnverifyCommand implements IDiscordCommand {
     @Override
     public void executeCommand(InteractionHook hook) {
         SlashCommandInteraction interaction = ((SlashCommandInteraction) hook.getInteraction());
-        hook.setEphemeral(true);
         if (
                 Warden.SUPERUSERS.contains(interaction.getUser().getIdLong()) ||
                         (interaction.getGuild() != null && CollectionUtil.containsAny(interaction.getMember().getRoles(), Warden.modRoles))
