@@ -87,7 +87,7 @@ public class JoinListener implements Listener {
                 .appendNewline()
                 .append(
                         Component.text("Please run ", NamedTextColor.GRAY)
-                                .append(Component.text("/verify " + verificationCode, NamedTextColor.WHITE).clickEvent(ClickEvent.suggestCommand("/verify " + verificationCode)))
+                                .append(Component.text("/verify " + verificationCode, NamedTextColor.WHITE).clickEvent(ClickEvent.suggestCommand("/verify code:" + verificationCode)))
                                 .append(Component.text(" in Discord!", NamedTextColor.GRAY))
                 );
     }
