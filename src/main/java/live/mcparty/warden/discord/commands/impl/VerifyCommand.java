@@ -4,8 +4,9 @@ import live.mcparty.warden.Warden;
 import live.mcparty.warden.discord.commands.IDiscordCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
@@ -20,21 +21,20 @@ public class VerifyCommand implements IDiscordCommand {
     }
 
     @Override
-    public void executeCommand(SlashCommandInteractionEvent event) {
-        event.deferReply(true).queue(interactionHook -> {
-            if (Warden.getInstance().getWhitelistHandler().containsDiscordID(event.getUser().getIdLong())) {
-                interactionHook.sendMessage("You've already verified!").setEphemeral(true).queue();
-                return;
-            }
-            interactionHook.setEphemeral(true);
-            String code = event.getOption("code").getAsString();
-            boolean success = Warden.getInstance().getVerificationHandler().verifyUser(code, event.getUser().getIdLong());
-            if (success) {
-                interactionHook.sendMessage(createSuccessEmbed()).queue();
-            } else {
-                interactionHook.sendMessage(createFailureEmbed()).queue();
-            }
-        });
+    public void executeCommand(InteractionHook hook) {
+        SlashCommandInteraction interaction = ((SlashCommandInteraction) hook.getInteraction());
+        if (Warden.getInstance().getWhitelistHandler().containsDiscordID(interaction.getUser().getIdLong())) {
+            hook.sendMessage("You've already verified!").setEphemeral(true).queue();
+            return;
+        }
+        hook.setEphemeral(true);
+        String code = interaction.getOption("code").getAsString();
+        boolean success = Warden.getInstance().getVerificationHandler().verifyUser(code, interaction.getUser().getIdLong());
+        if (success) {
+            hook.sendMessage(createSuccessEmbed()).queue();
+        } else {
+            hook.sendMessage(createFailureEmbed()).queue();
+        }
     }
 
     private MessageCreateData createSuccessEmbed() {

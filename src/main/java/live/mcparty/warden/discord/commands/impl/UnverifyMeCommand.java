@@ -4,7 +4,8 @@ import live.mcparty.warden.Warden;
 import live.mcparty.warden.discord.commands.IDiscordCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
@@ -20,16 +21,15 @@ public class UnverifyMeCommand implements IDiscordCommand {
     }
 
     @Override
-    public void executeCommand(SlashCommandInteractionEvent event) {
-        event.deferReply(true).queue(hook -> {
-            hook.setEphemeral(true);
-            UUID uuid = Warden.getInstance().getWhitelistHandler().unwhitelistByDiscordID(event.getUser().getIdLong());
-            if (uuid == null) {
-                hook.sendMessage(createUnverifyFailEmbed()).queue();
-            } else {
-                hook.sendMessage(createUnverifyEmbed(uuid, event.getUser().getIdLong())).queue();
-            }
-        });
+    public void executeCommand(InteractionHook hook) {
+        SlashCommandInteraction interaction = ((SlashCommandInteraction) hook.getInteraction());
+        hook.setEphemeral(true);
+        UUID uuid = Warden.getInstance().getWhitelistHandler().unwhitelistByDiscordID(interaction.getUser().getIdLong());
+        if (uuid == null) {
+            hook.sendMessage(createUnverifyFailEmbed()).queue();
+        } else {
+            hook.sendMessage(createUnverifyEmbed(uuid, interaction.getUser().getIdLong())).queue();
+        }
     }
 
     private MessageCreateData createUnverifyEmbed(UUID uuid, long discordId) {

@@ -37,7 +37,9 @@ public class CommandManager extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-        commandMap.get(event.getName()).executeCommand(event);
+        event.deferReply(true).queue(hook -> {
+            commandMap.get(event.getName()).executeCommand(hook);
+        });
     }
 
 //    @Override

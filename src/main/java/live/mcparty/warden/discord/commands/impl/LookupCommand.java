@@ -4,9 +4,10 @@ import live.mcparty.warden.Warden;
 import live.mcparty.warden.discord.commands.IDiscordCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
+import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
@@ -25,35 +26,34 @@ public class LookupCommand implements IDiscordCommand {
     }
 
     @Override
-    public void executeCommand(SlashCommandInteractionEvent event) {
-        event.deferReply(true).queue(hook -> {
-            hook.setEphemeral(event.getOption("ephemeral", true, OptionMapping::getAsBoolean));
-            var discordOption = event.getOption("discord");
-            var minecraftOption = event.getOption("minecraft");
-            if (discordOption != null) {
-                var discordUser = discordOption.getAsUser();
-                UUID uuid = Warden.getInstance().getWhitelistHandler().getByDiscordID(discordUser.getIdLong());
-                if (uuid == null) {
-                    hook.sendMessage(createLookupFailEmbed("User not found in whitelist.")).queue();
-                } else {
-                    hook.sendMessage(createLookupEmbed(uuid, null, discordUser.getIdLong())).queue();
-                }
-            } else if (minecraftOption != null) {
-                String username = minecraftOption.getAsString();
-                UUID uuid = Bukkit.getOfflinePlayer(username).getUniqueId();
-                if (uuid.version() != 4) {
-                    hook.sendMessage(createLookupFailEmbed("UUID lookup failed. Is this a valid username? \n(`" + username + "`)")).queue();
-                }
-                Long discordId = Warden.getInstance().getWhitelistHandler().getByUUID(uuid);
-                if (discordId == null) {
-                    hook.sendMessage("User not found in whitelist. \n(`" + username + "`)").queue();
-                } else {
-                    hook.sendMessage(createLookupEmbed(uuid, username, discordId)).queue();
-                }
+    public void executeCommand(InteractionHook hook) {
+        SlashCommandInteraction interaction = (SlashCommandInteraction) hook.getInteraction();
+        hook.setEphemeral(interaction.getOption("ephemeral", true, OptionMapping::getAsBoolean));
+        var discordOption = interaction.getOption("discord");
+        var minecraftOption = interaction.getOption("minecraft");
+        if (discordOption != null) {
+            var discordUser = discordOption.getAsUser();
+            UUID uuid = Warden.getInstance().getWhitelistHandler().getByDiscordID(discordUser.getIdLong());
+            if (uuid == null) {
+                hook.sendMessage(createLookupFailEmbed("User not found in whitelist.")).queue();
             } else {
-                hook.sendMessage(MessageCreateData.fromContent("You must provide one of the options!")).queue();
+                hook.sendMessage(createLookupEmbed(uuid, null, discordUser.getIdLong())).queue();
             }
-        });
+        } else if (minecraftOption != null) {
+            String username = minecraftOption.getAsString();
+            UUID uuid = Bukkit.getOfflinePlayer(username).getUniqueId();
+            if (uuid.version() != 4) {
+                hook.sendMessage(createLookupFailEmbed("UUID lookup failed. Is this a valid username? \n(`" + username + "`)")).queue();
+            }
+            Long discordId = Warden.getInstance().getWhitelistHandler().getByUUID(uuid);
+            if (discordId == null) {
+                hook.sendMessage("User not found in whitelist. \n(`" + username + "`)").queue();
+            } else {
+                hook.sendMessage(createLookupEmbed(uuid, username, discordId)).queue();
+            }
+        } else {
+            hook.sendMessage(MessageCreateData.fromContent("You must provide one of the options!")).queue();
+        }
     }
 
     private MessageCreateData createLookupEmbed(UUID uuid, String username, long discordId) {
