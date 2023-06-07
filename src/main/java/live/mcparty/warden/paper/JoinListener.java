@@ -33,7 +33,7 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void onLogin(PlayerLoginEvent loginEvent) {
-        if (Warden.isMigratoryPeriod) return;
+        if (Warden.isMigratoryPeriod && loginEvent.getResult() != PlayerLoginEvent.Result.KICK_WHITELIST) return;
         Warden warden = Warden.getInstance();
         PlayerProfile player = loginEvent.getPlayer().getPlayerProfile();
         if (!warden.getWhitelistHandler().containsUUID(player.getId())) {
