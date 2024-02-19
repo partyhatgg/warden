@@ -1,47 +1,23 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "8.1.1"
     java
 }
 
 group = "dev.partyhat"
 version = "1.0.6"
 
-repositories {
-    mavenCentral()
-    maven {
-        name = "papermc-repo"
-        url = uri("https://repo.papermc.io/repository/maven-public/")
-    }
-    maven {
-        name = "sonatype"
-        url = uri("https://oss.sonatype.org/content/groups/public/")
-    }
-}
-val shadowMe: Configuration by configurations.creating {
-    configurations.implementation.get().extendsFrom(this)
-}
+subprojects {
+    apply<JavaPlugin>()
 
-dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
-    shadowMe("net.dv8tion:JDA:5.0.0-beta.9")
-    shadowMe("com.fasterxml.jackson.core:jackson-databind:2.15.2")
-}
+    group = rootProject.group
+    version = rootProject.version
 
-java {
-    withSourcesJar()
-}
+    val include: Configuration by configurations.creating {
+        configurations.implementation.get().extendsFrom(this)
+    }
 
-tasks {
-    build {
-        dependsOn(shadowJar)
-    }
-    shadowJar {
-        configurations = listOf(shadowMe)
-    }
-    processResources {
-        val props = mapOf("version" to version)
-        filesMatching("plugin.yml") {
-            expand(props)
-        }
+    tasks.jar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        dependsOn(include)
+        from(include.files.map { zipTree(it) })
     }
 }
