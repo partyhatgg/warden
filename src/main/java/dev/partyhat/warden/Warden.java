@@ -1,9 +1,9 @@
-package live.mcparty.warden;
+package dev.partyhat.warden;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import live.mcparty.warden.discord.CommandManager;
-import live.mcparty.warden.discord.LeaveListener;
-import live.mcparty.warden.paper.JoinListener;
+import dev.partyhat.warden.discord.CommandManager;
+import dev.partyhat.warden.discord.LeaveListener;
+import dev.partyhat.warden.paper.JoinListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Role;

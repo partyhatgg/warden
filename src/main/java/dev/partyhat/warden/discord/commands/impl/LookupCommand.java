@@ -1,11 +1,10 @@
-package live.mcparty.warden.discord.commands.impl;
+package dev.partyhat.warden.discord.commands.impl;
 
-import live.mcparty.warden.Warden;
-import live.mcparty.warden.discord.commands.IDiscordCommand;
+import dev.partyhat.warden.Warden;
+import dev.partyhat.warden.discord.commands.IDiscordCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;

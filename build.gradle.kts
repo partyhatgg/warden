@@ -3,7 +3,7 @@ plugins {
     java
 }
 
-group = "live.mcparty"
+group = "dev.partyhat"
 version = "1.0.6"
 
 repositories {

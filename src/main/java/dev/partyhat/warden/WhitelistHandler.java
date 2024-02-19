@@ -1,4 +1,4 @@
-package live.mcparty.warden;
+package dev.partyhat.warden;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;

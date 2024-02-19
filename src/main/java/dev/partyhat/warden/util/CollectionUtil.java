@@ -1,4 +1,4 @@
-package live.mcparty.warden.util;
+package dev.partyhat.warden.util;
 
 import java.util.Collection;
 

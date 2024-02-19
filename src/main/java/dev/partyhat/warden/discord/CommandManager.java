@@ -1,19 +1,15 @@
-package live.mcparty.warden.discord;
+package dev.partyhat.warden.discord;
 
-import live.mcparty.warden.Warden;
-import live.mcparty.warden.discord.commands.IAutocompleteDiscordCommand;
-import live.mcparty.warden.discord.commands.IDiscordCommand;
-import live.mcparty.warden.discord.commands.impl.LookupCommand;
-import live.mcparty.warden.discord.commands.impl.UnverifyCommand;
-import live.mcparty.warden.discord.commands.impl.UnverifyMeCommand;
-import live.mcparty.warden.discord.commands.impl.VerifyCommand;
+import dev.partyhat.warden.Warden;
+import dev.partyhat.warden.discord.commands.IDiscordCommand;
+import dev.partyhat.warden.discord.commands.impl.LookupCommand;
+import dev.partyhat.warden.discord.commands.impl.UnverifyCommand;
+import dev.partyhat.warden.discord.commands.impl.UnverifyMeCommand;
+import dev.partyhat.warden.discord.commands.impl.VerifyCommand;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
-import net.dv8tion.jda.internal.interactions.command.SlashCommandInteractionImpl;
 
 import java.util.HashMap;
 import java.util.Map;

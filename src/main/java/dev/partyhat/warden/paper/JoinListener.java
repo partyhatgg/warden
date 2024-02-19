@@ -1,8 +1,8 @@
-package live.mcparty.warden.paper;
+package dev.partyhat.warden.paper;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
-import live.mcparty.warden.VerificationHandler;
-import live.mcparty.warden.Warden;
+import dev.partyhat.warden.VerificationHandler;
+import dev.partyhat.warden.Warden;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
