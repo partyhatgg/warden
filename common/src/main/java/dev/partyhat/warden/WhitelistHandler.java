@@ -30,7 +30,6 @@ public class WhitelistHandler {
      */
     public void readFromFile() {
         Warden instance = Warden.getInstance();
-        Logger logger = instance.getSLF4JLogger();
         try {
             if (!file.exists()) {
                 if (file.getParentFile().mkdirs()) {
@@ -39,9 +38,9 @@ public class WhitelistHandler {
             }
             whitelist.putAll(instance.getObjectMapper().readValue(file, new TypeReference<>() {}));
         } catch (StreamReadException e) {
-            logger.error("Invalid content found while reading.", e);
+            Warden.LOGGER.error("Invalid content found while reading.", e);
         } catch (DatabindException e) {
-            logger.error("Invalid content structure found while reading", e);
+            Warden.LOGGER.error("Invalid content structure found while reading", e);
         } catch (IOException e) {
             throw new RuntimeException("Something went catastrophically wrong when reading whitelist!", e);
         }
@@ -52,12 +51,11 @@ public class WhitelistHandler {
      */
     public void saveToFile() {
         Warden instance = Warden.getInstance();
-        Logger logger = instance.getSLF4JLogger();
         try {
             instance.getObjectMapper().writeValue(file, whitelist);
         } catch (StreamWriteException | DatabindException e) {
             // I think this is fine to ignore?
-            logger.warn("Not sure what happened", e);
+            Warden.LOGGER.warn("Not sure what happened", e);
         } catch (IOException e) {
             throw new RuntimeException("Something went catastrophically wrong when writing whitelist to file!", e);
         }

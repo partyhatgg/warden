@@ -26,7 +26,7 @@ public class JoinListener implements Listener {
         if (!warden.getWhitelistHandler().containsUUID(player.getUniqueId())) {
             VerificationHandler.VerificationCode maybeVc = warden.getVerificationHandler().getVerificationCodeByUuid(player.getUniqueId());
             VerificationHandler.VerificationCode vc = (maybeVc != null) ? maybeVc : warden.getVerificationHandler().generateVerificationCodeForPlayer(player.getUniqueId());
-            warden.getSLF4JLogger().info("Issued code `" + vc.code() + "` to " + player.getName() + " (`" + player.getUniqueId() + "`)");
+            Warden.LOGGER.info("Issued code `" + vc.code() + "` to " + player.getName() + " (`" + player.getUniqueId() + "`)");
             player.sendMessage(this.createMigrationText(vc.code()));
         }
     }

@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
-import org.bukkit.Bukkit;
 
 import java.awt.*;
 import java.util.UUID;
@@ -32,7 +31,7 @@ public class UnverifyMeCommand implements IDiscordCommand {
     }
 
     private MessageCreateData createUnverifyEmbed(UUID uuid, long discordId) {
-        String username = Bukkit.getOfflinePlayer(uuid).getName();
+        String username = Warden.PLAYER_UTIL.getPlayer(uuid).username();
         MessageEmbed lookupEmbed = new EmbedBuilder()
                 .setAuthor("User Unverified", null, "https://cdn.discordapp.com/icons/421459800757501952/255e24acfe657af4f0a01067d58ff99d.png")
                 .setColor(Color.CYAN)

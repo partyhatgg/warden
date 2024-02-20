@@ -10,7 +10,6 @@ import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
-import org.bukkit.Bukkit;
 
 import java.awt.*;
 import java.util.UUID;
@@ -39,7 +38,7 @@ public class LookupCommand implements IDiscordCommand {
             }
         } else if (minecraftOption != null) {
             String username = minecraftOption.getAsString();
-            UUID uuid = Bukkit.getOfflinePlayer(username).getUniqueId();
+            UUID uuid = Warden.PLAYER_UTIL.getPlayer(username).uuid();
             if (uuid.version() != 4) {
                 hook.sendMessage(createLookupFailEmbed("UUID lookup failed. Is this a valid username? \n(`" + username + "`)")).queue();
             }
@@ -61,7 +60,7 @@ public class LookupCommand implements IDiscordCommand {
 
     private MessageCreateData createLookupEmbed(UUID uuid, String username, long discordId) {
         if (username == null) {
-            username = Bukkit.getOfflinePlayer(uuid).getName();
+            username = Warden.PLAYER_UTIL.getPlayer(uuid).username();
         }
         MessageEmbed lookupEmbed = new EmbedBuilder()
                 .setAuthor("User Lookup", null, "https://cdn.discordapp.com/icons/421459800757501952/255e24acfe657af4f0a01067d58ff99d.png")

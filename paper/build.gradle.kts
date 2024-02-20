@@ -12,8 +12,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
-    include("net.dv8tion:JDA:5.0.0-beta.9")
-    include("com.fasterxml.jackson.core:jackson-databind:2.15.2")
+    include(project(":common"))
 }
 
 java {

@@ -1,2 +1,5 @@
 rootProject.name = "Warden"
-include("paper")
+include(
+    "common",
+    "paper"
+)

@@ -28,9 +28,9 @@ public class CommandManager extends ListenerAdapter {
         jda.updateCommands().addCommands(
                 commandMap.values().stream().map(IDiscordCommand::createCommand).collect(Collectors.toSet())
         ).queue(success -> {
-            Warden.getInstance().getSLF4JLogger().info("Successfully registered discord commands.");
+            Warden.LOGGER.info("Successfully registered discord commands.");
         }, failure -> {
-            Warden.getInstance().getSLF4JLogger().error("Failed to register discord commands.");
+            Warden.LOGGER.error("Failed to register discord commands.");
         });
     }
 
