@@ -11,13 +11,13 @@ subprojects {
     group = rootProject.group
     version = rootProject.version
 
-    val include: Configuration by configurations.creating {
+    val bundle: Configuration by configurations.creating {
         configurations.implementation.get().extendsFrom(this)
     }
 
     tasks.jar {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        dependsOn(include)
-        from(include.files.map { zipTree(it) })
+        dependsOn(bundle)
+        from(bundle.files.map { zipTree(it) })
     }
 }
