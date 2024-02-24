@@ -8,5 +8,4 @@ public interface IPlayerUtil {
 
     Player getPlayer(String username);
 
-    record Player(UUID uuid, String username) {}
 }

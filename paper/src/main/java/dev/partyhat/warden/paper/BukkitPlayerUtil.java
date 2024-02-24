@@ -1,6 +1,7 @@
 package dev.partyhat.warden.paper;
 
 import dev.partyhat.warden.util.player.IPlayerUtil;
+import dev.partyhat.warden.util.player.Player;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
