@@ -11,7 +11,12 @@ public class PaperConfig implements IConfig {
     }
 
     @Override
-    public Object get(String path) {
+    public Object getPrimitive(String path) {
         return this.config.get(path);
+    }
+
+    @Override
+    public <T> T getObject(String path, Class<T> type) {
+        return this.config.getObject(path, type);
     }
 }

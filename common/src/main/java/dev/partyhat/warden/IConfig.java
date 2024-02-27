@@ -1,5 +1,7 @@
 package dev.partyhat.warden;
 
 public interface IConfig {
-    Object get(String path);
+    Object getPrimitive(String path);
+
+    <T> T getObject(String path, Class<T> type);
 }
