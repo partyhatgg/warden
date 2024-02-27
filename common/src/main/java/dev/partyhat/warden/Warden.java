@@ -64,6 +64,7 @@ public class Warden {
 
     public void onShutdown() {
         this.whitelistHandler.saveToFile();
+        this.jda.shutdown();
     }
 
     public ObjectMapper getObjectMapper() {
