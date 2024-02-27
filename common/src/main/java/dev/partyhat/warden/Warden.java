@@ -13,8 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,6 +45,7 @@ public class Warden {
     private final ObjectMapper om = new ObjectMapper();
     private WhitelistHandler whitelistHandler;
     private VerificationHandler verificationHandler;
+    private JoinHandler joinHandler;
 
     public Warden(File dataFolder, IConfig config) {
         instance = this;
@@ -52,12 +53,13 @@ public class Warden {
         this.whitelistHandler.readFromFile();
         this.verificationHandler = new VerificationHandler();
 
-        isMigratoryPeriod = ((boolean) config.get("warden.migration"));
-        this.jda = JDABuilder.createDefault(((String) config.get("warden.jda.token"))).build();
-        modRoles = ((List<Long>) config.get("warden.modroles")).stream().map(id -> jda.getRoleById(id)).collect(Collectors.toSet());
+        isMigratoryPeriod = config.getObject("warden.migration", Boolean.class);
+        this.jda = JDABuilder.createDefault((String) config.getPrimitive("warden.jda.token")).build();
+        modRoles = Arrays.stream(config.getObject("warden.modroles", long[].class)).mapToObj(id -> jda.getRoleById(id)).collect(Collectors.toSet());
         this.commandManager = new CommandManager();
         this.commandManager.registerCommands(this.jda);
         this.jda.addEventListener(this.commandManager, new LeaveListener());
+        this.joinHandler = new JoinHandler();
     }
 
     public void onShutdown() {
@@ -74,5 +76,9 @@ public class Warden {
 
     public VerificationHandler getVerificationHandler() {
         return verificationHandler;
+    }
+
+    public JoinHandler getJoinHandler() {
+        return joinHandler;
     }
 }
