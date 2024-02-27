@@ -16,8 +16,10 @@ subprojects {
     }
 
     tasks.jar {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         dependsOn(bundle)
-        from(bundle.files.map { zipTree(it) })
+        doLast {
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+            from(bundle.files.map { zipTree(it) })
+        }
     }
 }

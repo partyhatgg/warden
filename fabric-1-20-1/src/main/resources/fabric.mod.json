@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "warden",
+  "version": "${version}",
+  "name": "Warden",
+  "description": "Used to manage verification on the OTV community mc server.",
+  "authors": [
+    "Sychic"
+  ],
+  "contact": {
+    "sources": "https://github.com/partyhatgg/warden"
+  },
+  "license": "ARR",
+  "icon": "assets/warden/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "server": [
+      "dev.partyhat.warden.fabric.WardenMod"
+    ]
+  },
+  "mixins": [
+    "mixins.warden.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.25",
+    "minecraft": "1.20.1",
+    "java": ">=17",
+    "adventure-platform-fabric": ">=5.9.0"
+  }
+}
