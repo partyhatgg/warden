@@ -24,6 +24,16 @@ dependencies {
     modImplementation(include("net.kyori:adventure-platform-fabric:5.9.0")!!)
 }
 
-tasks.remapJar {
-    archiveBaseName = "Warden"
+tasks {
+    processResources {
+        inputs.property("version", project.version)
+        filesMatching("fabric.mod.json") {
+            expand(getProperties())
+            expand("version" to project.version)
+        }
+    }
+
+    remapJar {
+        archiveBaseName = "Warden"
+    }
 }
