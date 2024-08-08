@@ -21,6 +21,8 @@ public class JoinListener implements Listener {
 
     @EventHandler
     public void onLogin(PlayerLoginEvent loginEvent) {
+        if (loginEvent.getResult() == PlayerLoginEvent.Result.KICK_BANNED) return;
+        if (loginEvent.getResult() == PlayerLoginEvent.Result.KICK_FULL) return;
         if (Warden.isMigratoryPeriod && loginEvent.getResult() != PlayerLoginEvent.Result.KICK_WHITELIST) return;
         Player player = new Player(loginEvent.getPlayer().getUniqueId(), loginEvent.getPlayer().getName());
         JoinHandler.LoginResult result = Warden.getInstance().getJoinHandler().handleLogin(player);

@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     bundle(project(":common"))
 }
 
@@ -24,6 +24,11 @@ tasks {
         val props = mapOf("version" to version)
         filesMatching("plugin.yml") {
             expand(props)
+        }
+    }
+    jar {
+        manifest {
+            attributes["paperweight-mappings-namespace"] = "mojang"
         }
     }
 }
