@@ -11,12 +11,13 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
     bundle(project(":common"))
 }
 
 java {
     withSourcesJar()
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 
 tasks {
@@ -30,5 +31,7 @@ tasks {
         manifest {
             attributes["paperweight-mappings-namespace"] = "mojang"
         }
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        from(configurations.bundle.get().files.map { zipTree(it) })
     }
 }

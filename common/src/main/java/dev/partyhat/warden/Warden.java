@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,7 +55,7 @@ public class Warden {
 
         isMigratoryPeriod = config.getObject("warden.migration", Boolean.class);
         this.jda = JDABuilder.createDefault((String) config.getPrimitive("warden.jda.token")).build();
-        modRoles = Arrays.stream(config.getObject("warden.modroles", long[].class)).mapToObj(id -> jda.getRoleById(id)).collect(Collectors.toSet());
+        modRoles = (Set<Role>) config.getObject("warden.modroles", ArrayList.class).stream().map(id -> jda.getRoleById(Long.parseLong(id.toString()))).collect(Collectors.toSet());
         this.commandManager = new CommandManager();
         this.commandManager.registerCommands(this.jda);
         this.jda.addEventListener(this.commandManager, new LeaveListener());

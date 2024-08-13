@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 /**
@@ -34,6 +35,7 @@ public class WhitelistHandler {
             if (!file.exists()) {
                 if (file.getParentFile().mkdirs()) {
                     file.createNewFile();
+                    Files.write(file.toPath(), "{}".getBytes());
                 }
             }
             whitelist.putAll(instance.getObjectMapper().readValue(file, new TypeReference<>() {}));
